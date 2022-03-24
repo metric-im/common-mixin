@@ -1,14 +1,14 @@
 {
-  "name": "@metric-im/common-components",
+  "name": "@metric-im/common-mixin",
   "version": "1.0.0",
-  "description": "Common Framework Components",
+  "description": "Common Framework Components for app-harness",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/metric-im/common-components.git"
+    "url": "git+https://github.com/metric-im/common-mixin.git"
   },
   "author": "Michael Sprague",
   "license": "UNLICENSED",
