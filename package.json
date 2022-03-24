@@ -1,0 +1,19 @@
+{
+  "name": "@metric-im/common-components",
+  "version": "1.0.0",
+  "description": "Common Framework Components",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/metric-im/common-components.git"
+  },
+  "author": "Michael Sprague",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/metric-im/common-components/issues"
+  },
+  "homepage": "https://github.com/metric-im/common-components#readme"
+}
