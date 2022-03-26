@@ -1,0 +1,39 @@
+. {
+    display:flex;
+    flex-direction: row;
+    width:100%;
+    height:100%;
+}
+.drawerSet {
+    display:flex;
+    margin-top:var(--spacer2);
+    flex-direction: column;
+    border-right:1px solid var(--page-border);
+    z-index:10;
+}
+.drawer {
+    min-width:120px;
+    border-top:1px solid var(--page-border);
+    border-right:1px solid var(--page-border);
+    border-bottom:1px solid var(--page-border);
+    padding:var(--spacer);
+    font-weight: bold;
+    color:var(--text-quiet);
+    margin-bottom:-1px;
+    margin-right:-1px;
+    background-color:var(--page-bg);
+    transition:all 200ms;
+}
+.drawer:hover {
+    cursor:pointer;
+    background-color:var(--page-action);
+}
+.drawer.selected {
+    color:var(--text-color);
+    border-right-color:transparent;
+    background-color:var(--page-selected);
+}
+.drawerContent {
+    flex:1 0;
+    padding:var(--spacer);
+}

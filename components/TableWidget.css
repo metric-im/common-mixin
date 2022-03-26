@@ -1,0 +1,28 @@
+. {
+    width:100%;
+}
+TABLE {
+    width:100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+TR:not(:first-child):hover {
+    background-color:var(--page-action);
+    cursor:pointer;
+}
+TR.selected {
+    background-color:var(--page-selected);
+}
+TH {
+    text-align:left;
+    white-space: nowrap;
+    letter-spacing: 2px;
+    padding-bottom:var(--spacerhalf);
+}
+TD {
+    text-align:left;
+    padding:2px 4px;
+}
+TD:not(:last-child) {
+    padding-right:var(--spacerhalf);
+}

@@ -1,0 +1,32 @@
+. {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: var(--spacer);
+    font-size: 0.8em;
+}
+#logo {
+    height:80px;
+    width:80px;
+}
+#page-header-context {
+    margin-left:var(--spacer);
+    flex:1 0;
+}
+#page-header-context H1 {
+    margin:4px 0;
+    transition:all 1s;
+}
+#page-header-context P {
+    margin:0;
+    transition:all 1s;
+}
+.session-control {
+    height:100%;
+    margin:0 24px;
+    display:flex;
+    align-items: center;
+}
+.session-control #userId {
+    margin-right:var(--spacer);
+}

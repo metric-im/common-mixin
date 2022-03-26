@@ -1,0 +1,26 @@
+. {
+    display:flex;
+    flex-direction: column;
+    align-items:center;
+}
+.checkbox {
+    position:relative;
+    display:flex;
+    margin:0 !important;
+    padding:0 6px;
+    align-content:center;
+    justify-content:center;
+    flex:1 0;
+    font-size:1.1em;
+    background-color:white;
+    border:1px solid black;
+    border-radius:3px;
+    align-items:center;
+    color:transparent;
+}
+.checkbox .icon {
+    padding:0;
+}
+.checkbox.checked {
+    color:var(--text-color);
+}

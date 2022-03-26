@@ -1,0 +1,22 @@
+. {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1;
+    border-left: 1px solid var(--page-border);
+    border-top: 1px solid var(--page-border);
+    border-bottom: 1px solid var(--page-border);
+    border-top-left-radius: 20px;
+    background-color: var(--page-bg);
+}
+.page-content {
+    flex:1 1;
+}
+.page-controls {
+    display: flex;
+    margin-top:var(--spacer);
+    height:30px;
+    align-self:flex-end;
+}
+.page-controls .k-button {
+    margin-left:var(--spacer);
+}
