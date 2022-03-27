@@ -31,7 +31,7 @@ export default class SignIn extends Component {
             if (status.accounts) {
                 // account is ambiguous
                 this.account.style.display='block';
-                this.account.innerHTML = status.accounts.map(a=>`<option>${a.account}</option>`);
+                this.account.innerHTML = status.accounts.map(a=>`<option>${a}</option>`);
                 this.status.innerHTML = "select account";
             } else {
                 document.location.replace('/')

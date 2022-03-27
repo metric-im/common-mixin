@@ -25,7 +25,7 @@ export class InputSelect extends Component {
         this.input = document.createElement("select");
         this.input.innerHTML = this.options.map(opt=>{
             let selected = (opt.value===this.props.data[this.props.name]);
-            return `<option ${selected?"selected":""} value="${opt.index}">${opt.name}</option>`
+            return `<option ${selected?"selected":""} value="${opt.value}">${opt.name}</option>`
         });
         this.input.value = this.options.findIndex(item=>item.value===this.props.data[this.props.name]);
         this.element.appendChild(this.input);

@@ -15,5 +15,15 @@
   "bugs": {
     "url": "https://github.com/metric-im/common-components/issues"
   },
-  "homepage": "https://github.com/metric-im/common-components#readme"
+  "homepage": "https://github.com/metric-im/common-components#readme",
+  "dependencies": {
+    "@metric-im/identifier": "^1.0.0",
+    "ace-builds": "^1.4.14",
+    "chart.js": "^3.7.1",
+    "express": "^4.17.3",
+    "marked": "^4.0.12",
+    "moment": "^2.29.1",
+    "xlsx": "^0.18.5",
+    "zebratime": "^1.0.4"
+  }
 }
