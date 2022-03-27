@@ -1,6 +1,6 @@
 {
   "name": "@metric-im/common-mixin",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Common Framework Components for app-harness",
   "main": "index.js",
   "scripts": {
