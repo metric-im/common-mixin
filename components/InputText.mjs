@@ -39,7 +39,7 @@ export class InputID extends InputText {
     }
     async render(element) {
         await super.render(element);
-        this.value = this.props.data[this.name];
+        this.value = this.props.data[this.name] || "";
         if (this.props.data[this.name]) {
             this.input.readOnly="readonly";
         }

@@ -10,6 +10,7 @@ class CommonMixin {
             'moment':'/node_modules/moment/moment.js',
             'ace':'/node_modules/ace-builds/src-noconflict/',
             'identifier':'/node_modules/@metric-im/identifier/index.js',
+            'firemacro':'/node_modules/@geistm/firemacro/index.js',
             'chartjs':'/node_modules/chart.js/dist/chart.js',
             'datepicker':'/node_modules/js-datepicker/dist/datepicker.min.js',
             'zebratime':'/node_modules/zebratime/zebratime.js',

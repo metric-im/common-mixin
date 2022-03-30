@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/metric-im/common-components#readme",
   "dependencies": {
+    "@geistm/firemacro": "^2.4.13",
     "@metric-im/identifier": "^1.0.0",
     "ace-builds": "^1.4.14",
     "chart.js": "^3.7.1",
