@@ -11,7 +11,7 @@
     "url": "git+https://github.com/metric-im/common-mixin.git"
   },
   "author": "Michael Sprague",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/metric-im/common-components/issues"
   },
