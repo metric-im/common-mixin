@@ -1,5 +1,7 @@
 . {
     width:100%;
+    max-height:50%;
+    overflow-y: auto;
 }
 TABLE {
     width:100%;
@@ -22,6 +24,7 @@ TH {
 TD {
     text-align:left;
     padding:2px 4px;
+    vertical-align: top;
 }
 TD:not(:last-child) {
     padding-right:var(--spacerhalf);
