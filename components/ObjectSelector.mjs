@@ -23,7 +23,6 @@ export default class ObjectSelector extends Component {
         }
         this.table = document.createElement('table');
         if (!this.props.data[this.props.name]) this.props.data[this.props.name] = [];
-        let source = this.props.data[this.props.name];
 
         for (let o of this.objects) {
             let row = this.table.insertRow();
@@ -32,12 +31,12 @@ export default class ObjectSelector extends Component {
             idcell.innerHTML = `${o._id}`;
             let descriptionCell = row.insertCell();
             descriptionCell.innerHTML = `${WikiParser.summarize(o.description||"")}`;
-            if (source.includes(o._id)) row.classList.add("selected");
+            if (this.props.data[this.props.name].includes(o._id)) row.classList.add("selected");
             row.addEventListener('click',(e)=>{
                 let tr = e.target.closest('TR');
                 tr.classList.toggle("selected");
-                if (tr.classList.contains("selected")) source.push(tr.id);
-                else source = source.filter(id=>id!==tr.id);
+                if (tr.classList.contains("selected")) this.props.data[this.props.name].push(tr.id);
+                else this.props.data[this.props.name] = this.props.data[this.props.name].filter(id=>id!==tr.id);
             })
         }
         this.element.appendChild(this.table);
