@@ -34,6 +34,10 @@
     background-color:var(--page-selected);
 }
 .drawerContent {
+    position:relative;
+    display:flex;
+    flex-direction: column;
     flex:1 0;
     padding:var(--spacer);
+    height:calc(100% - var(--spacer2));
 }

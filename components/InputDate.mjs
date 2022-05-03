@@ -12,7 +12,9 @@ export class InputDate extends Component {
         }
         this.input = document.createElement("input");
         this.input.setAttribute('type','date');
-        this.input.value = this.props.data[this.props.name]||"";
+        if (this.props.data[this.props.name]) {
+            this.input.value = moment(this.props.data[this.props.name]).format("YYYY-MM-DD");
+        }
         this.element.appendChild(this.input);
         this.element.addEventListener('input',async e=>{
             this.props.data[this.props.name] = e.target.value;

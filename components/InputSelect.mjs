@@ -41,9 +41,9 @@ export class InputSelect extends Component {
         }
     }
     get value() {
-        return this.options[parseInt(this.input.value)].value;
+        return this.input.value;
     }
     set value(val) {
-        this.input.value = this.options.findIndex(item=>item.value===val);
+        this.input.value = val;
     }
 }

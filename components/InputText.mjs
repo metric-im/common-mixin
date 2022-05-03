@@ -54,3 +54,19 @@ export class InputPass extends InputText {
         this.input.type = "password"
     }
 }
+export class InputNumber extends InputText {
+    constructor(props) {
+        super(props);
+    }
+    async render(element) {
+        await super.render(element);
+        this.input.type = "number"
+        this.element.addEventListener('input',async e=>{
+            this.props.data[this.props.name] = Number(e.target.value);
+            await this.announceUpdate(this.props.name);
+        });
+    }
+    get value() {
+        return Number(this.input.value);
+    }
+}
