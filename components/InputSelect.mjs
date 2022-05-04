@@ -25,25 +25,28 @@ export class InputSelect extends Component {
         this.input = document.createElement("select");
         this.input.innerHTML = this.options.map(opt=>{
             let selected = (opt.value===this.props.data[this.props.name]);
-            return `<option ${selected?"selected":""} value="${opt.value}">${opt.name}</option>`
+            return `<option ${selected?"selected":""} value="${opt.index}">${opt.name}</option>`
         });
-        this.input.value = (this.props.data[this.props.name] || '');
         this.element.appendChild(this.input);
         this.element.addEventListener('change',async e=>{
-            this.props.data[this.props.name] = e.target.value;
+            this.props.data[this.props.name] = this.options[e.target.value].value;
             await this.announceUpdate(this.props.name);
         });
     }
     async handleUpdate(attributeName) {
         await super.handleUpdate(attributeName);
-        if (this.props.name === attributeName) {
-            this.input.value = this.props.data[this.props.name];
-        }
+        if (this.props.name === attributeName) this.value = this.props.data[this.props.name];
     }
+
+    /**
+     * NOTE,
+     * @returns {string}
+     */
     get value() {
-        return this.input.value;
+        return this.options[this.input.value].value;
     }
     set value(val) {
-        this.input.value = val;
+        let option = this.options.find(opt=>opt.value===val);
+        if (option) this.input.value = option.index;
     }
 }

@@ -11,7 +11,8 @@ export default class SignIn extends Component {
             <div><input type='text' id='username' placeholder='username'/></div>
             <div><input type='password' id='password' placeholder='password'/></div>
             <div><select style="display:none" id='account'></select></div>
-            <div><button id="submit">login</button><span class="login-status"></span></div>
+            <div><button id="submit">login</button><button id="skip">skip</button></div>
+            <div class="login-status"></div>
             `
         this.username = form.querySelector('#username');
         this.password = form.querySelector('#password');
@@ -19,6 +20,8 @@ export default class SignIn extends Component {
         this.status = form.querySelector('.login-status');
         this.submit = form.querySelector('#submit');
         this.submit.addEventListener('click',this.onSubmit.bind(this));
+        this.skip = form.querySelector('#skip');
+        this.skip.addEventListener('click',this.onSkip.bind(this));
     }
     async onSubmit(event) {
         this.status.innerHTML = "";
@@ -39,5 +42,11 @@ export default class SignIn extends Component {
         } else {
             this.status.innerHTML = "login failed";
         }
+    }
+    async onSkip(event) {
+        this.username.value = "guest";
+        this.password.value = "guest";
+        this.account.value = "guest";
+        await this.onSubmit();
     }
 }
