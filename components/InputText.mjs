@@ -13,6 +13,13 @@ export class InputText extends Component {
         this.input = document.createElement("input");
         this.input.placeholder = this.props.placeholder || "Enter "+(this.props.title||this.props.name);
         this.input.value = this.props.data[this.props.name]||"";
+        if (this.props.options) {
+            let datalist = document.createElement("datalist");
+            datalist.id = this.props.name+"_datalist";
+            for (let option of this.props.options) datalist.innerHTML+=`<OPTION>${option}</OPTION>`;
+            this.element.appendChild(datalist);
+            this.input.setAttribute("list",datalist.id);
+        }
         this.element.appendChild(this.input);
         this.element.addEventListener('input',async e=>{
             this.props.data[this.props.name] = e.target.value;
