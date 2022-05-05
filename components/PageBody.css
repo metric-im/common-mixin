@@ -17,7 +17,7 @@
     display: flex;
     flex:0 0;
     margin-top:var(--spacer);
-    height:30px;
+    height:40px;
     align-self:flex-end;
 }
 

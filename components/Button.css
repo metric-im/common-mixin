@@ -1,3 +1,25 @@
 . {
-    margin-left:var(--spacerhalf);
+    margin-right:var(--spacer);
+}
+
+button {
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    vertical-align: middle;
+    align-content: space-around;
+    border:2px solid var(--page-border);
+    background-color:var(--tray-bg);
+    border-radius:8px;
+    cursor:pointer;
+    color:var(--text-color);
+    white-space: nowrap;
+    font-size: 1.02em;
+}
+button:hover {
+    background-color:var(--page-action);
+}
+.Button.primary BUTTON {
+    font-weight:bold;
+    background-color:var(--item-elevated);
 }
