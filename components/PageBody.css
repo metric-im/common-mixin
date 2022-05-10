@@ -10,9 +10,11 @@
     background-color: var(--page-bg);
 }
 .page-content {
+    position:relative;
     display:flex;
     flex-direction: column;
     flex:1 1;
+    overflow:auto;
 }
 .page-controls {
     display: flex;
