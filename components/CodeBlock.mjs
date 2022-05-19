@@ -1,5 +1,4 @@
 import Component from "./Component.mjs";
-import Identifier from '/lib/identifier';
 
 export default class CodeBlock extends Component {
     constructor(props) {

@@ -1,11 +1,11 @@
 import Component from './Component.mjs';
-import Identifier from '/lib/identifier';
+import IdForge from './IdForge.mjs';
 
 export default class Text extends Component {
     constructor(props) {
         super(props);
         this.element = document.createElement('span');
-        this.element.id = Identifier.new;
+        this.element.id = IdForge.randomId();
     }
     async render(element) {
         await super.render(element);

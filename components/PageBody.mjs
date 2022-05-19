@@ -14,7 +14,7 @@ export default class PageBody extends Component {
     }
     async page(id) {
         try {
-            if (!this.pages[id]) this.pages[id] = await import("/components/"+id+".mjs");
+            if (!this.pages[id]) this.pages[id] = await import("./"+id+".mjs");
             return this.pages[id].default;
         } catch(e) {
             console.log("unable to load page "+id);
