@@ -13,7 +13,7 @@ export default class PageHeader extends Component {
         this.element.innerHTML =
         `<img id="logo" alt="Logo" src="/assets/logo.png" onclick="document.location='/'" style="cursor:pointer">
         <div id="page-header-context">
-            <h1>${this.props.context.name||'Metric Messenger'}</h1>
+            <h1>${this.props.context.name||''}</h1>
             <p id='header-path'>${this.props.title||""} /${this.props.page}</p>
         </div>
         <div class="session-control">
