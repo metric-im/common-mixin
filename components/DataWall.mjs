@@ -1,5 +1,4 @@
 import Component from "./Component.mjs";
-import FireMacro from "/lib/firemacro";
 
 export default class DataWall extends Component {
     constructor(props) {
@@ -17,7 +16,8 @@ export default class DataWall extends Component {
         }
     }
     async mergeData() {
-        let source = new FireMacro(this.props.blocks);
-        return await source.parse(this.props.data);
+        console.log('skipping macro');
+        // let source = new FireMacro(this.props.blocks);
+        // return await source.parse(this.props.data);
     }
 }

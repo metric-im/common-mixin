@@ -12,7 +12,7 @@ export default class CommonMixin {
         this.library = {
             'moment':this.rootPath+'/node_modules/moment/moment.js',
             'ace':this.rootPath+'/node_modules/ace-builds/src-noconflict/',
-            'firemacro':this.rootPath+'/node_modules/@geistm/firemacro/index.js',
+            // 'firemacro':this.rootPath+'/node_modules/@geistm/firemacro/index.js',
             'chartjs':this.rootPath+'/node_modules/chart.js/dist/chart.js',
             'datepicker':this.rootPath+'/node_modules/js-datepicker/dist/datepicker.min.js',
             'zebratime':this.rootPath+'/node_modules/zebratime/zebratime.js',
