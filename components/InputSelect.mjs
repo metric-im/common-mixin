@@ -31,7 +31,11 @@ export class InputSelect extends Component {
         this.element.addEventListener('change',async e=>{
             this.props.data[this.props.name] = this.options[e.target.value].value;
             await this.announceUpdate(this.props.name);
+            if (this.value !== this.originalValue) this.lock.add('exit');
+            else this.lock.clear('exit');
         });
+        this.lock.clear();
+        this.originalValue = this.value;
     }
     async handleUpdate(attributeName) {
         await super.handleUpdate(attributeName);

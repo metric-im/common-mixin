@@ -22,14 +22,18 @@ export class InputText extends Component {
         }
         this.element.appendChild(this.input);
         this.element.addEventListener('input',async e=>{
-            this.props.data[this.props.name] = e.target.value;
+            this.props.data[this.props.name] = this.value;
             await this.announceUpdate(this.props.name);
+            if (this.value !== this.originalValue) this.lock.add('exit');
+            else this.lock.clear('exit');
         });
+        this.lock.clear();
+        this.originalValue = this.value;
     }
     async handleUpdate(attributeName) {
         await super.handleUpdate(attributeName);
         if (this.props.name === attributeName) {
-            this.input.value = this.props.data[this.props.name];
+            this.value = this.props.data[this.props.name];
         }
     }
     get value() {

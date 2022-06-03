@@ -21,7 +21,7 @@
     color:var(--text-quiet);
     margin-bottom:-1px;
     margin-right:-1px;
-    background-color:var(--page-bg);
+    background-color:var(--bg-color);
     transition:all 200ms;
 }
 .drawer:hover {

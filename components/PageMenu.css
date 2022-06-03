@@ -13,7 +13,7 @@ A {
     flex-direction: column;
     width:80px;
     height:80px;
-    border:2px solid var(--page-border);
+    /*border:1px solid var(--bg-color);*/
     border-radius:20px;
     margin:0 0 var(--spacer) var(--spacer);
     box-sizing: border-box;
@@ -21,6 +21,7 @@ A {
     justify-content: center;
     user-select:none;
     transition:all 200ms;
+    background-color:var(--bg-color-quiet-d);
 }
 .nav-button .icon {
     font-size:2em;
@@ -30,6 +31,10 @@ A {
     font-size:0.8em;
 }
 .nav-button:hover {
-    background-color:var(--page-action);
+    color:var(--text-color);
+    background-color:var(--bg-color);
     cursor:pointer;
+}
+.nav-button:hover .text {
+    color:var(--text-color);
 }

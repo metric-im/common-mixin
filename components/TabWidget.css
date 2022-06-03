@@ -15,14 +15,14 @@
     font-weight: bold;
     color:var(--text-quiet);
     margin-bottom:-1px;
-    background-color:var(--page-bg);
+    background-color:var(--bg-color);
 }
 .tab:hover {
     cursor:pointer;
 }
 .tab.selected {
     color:var(--text-color);
-    border-bottom-color:var(--page-bg);
+    border-bottom-color:var(--bg-color);
 }
 .tabContent {
     flex:1 0;

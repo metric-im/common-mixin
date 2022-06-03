@@ -3,11 +3,12 @@
     display: flex;
     flex-direction: column;
     flex: 1 1;
-    border-left: 1px solid var(--page-border);
-    border-top: 1px solid var(--page-border);
-    border-bottom: 1px solid var(--page-border);
+    /*border-left: 1px solid var(--page-border);*/
+    /*border-top: 1px solid var(--page-border);*/
+    /*border-bottom: 1px solid var(--page-border);*/
     border-top-left-radius: 20px;
-    background-color: var(--page-bg);
+    background-color: var(--bg-color);
+    color:var(--text-color);
 }
 .page-content {
     position:relative;

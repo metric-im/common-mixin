@@ -13,7 +13,8 @@ TR {
     cursor:pointer;
 }
 TR.selected {
-    background-color:var(--item-elevated);
+    background-color:var(--action-color);
+    color:var(--bg-color);
 }
 TD {
     vertical-align: top;
