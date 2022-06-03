@@ -80,4 +80,7 @@ export class InputNumber extends InputText {
     get value() {
         return Number(this.input.value);
     }
+    set value(val) {
+        this.input.value = val;
+    }
 }
