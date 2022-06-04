@@ -10,7 +10,8 @@ export default class CommonMixin {
         this.connector = connector;
         this.rootPath = path.dirname(fileURLToPath(import.meta.url));
         this.library = {
-            'moment':this.rootPath+'/node_modules/moment/moment.js',
+            'moment':this.rootPath+'/node_modules/moment/min/moment-with-locales.min.js',
+            'moment-timezone':this.rootPath+'/node_modules/moment-timezone/builds/moment-timezone-with-data.js',
             'ace':this.rootPath+'/node_modules/ace-builds/src-noconflict/',
             // 'firemacro':this.rootPath+'/node_modules/@geistm/firemacro/index.js',
             'chartjs':this.rootPath+'/node_modules/chart.js/dist/chart.js',
