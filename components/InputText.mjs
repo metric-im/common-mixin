@@ -3,6 +3,11 @@ import Component from './Component.mjs'
 export class InputText extends Component {
     constructor(props) {
         super(props)
+        let dot = this.props.name.split('.');
+        if (dot.length > 1) {
+            this.props.data = this.props.data[dot[0]];
+            this.props.name = dot[1];
+        }
     }
     async render(element) {
         await super.render(element);

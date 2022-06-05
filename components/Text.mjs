@@ -6,6 +6,11 @@ export default class Text extends Component {
         super(props);
         this.element = document.createElement('span');
         this.element.id = IdForge.randomId();
+        let dot = this.props.name.split('.');
+        if (dot.length > 1) {
+            this.props.data = this.props.data[dot[0]];
+            this.props.name = dot[1];
+        }
     }
     async render(element) {
         await super.render(element);
