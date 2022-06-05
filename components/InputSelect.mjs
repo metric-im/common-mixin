@@ -9,12 +9,16 @@ import Component from './Component.mjs'
 export class InputSelect extends Component {
     constructor(props) {
         super(props)
-        this.options = props.options.map((opt,index)=>{
-            if (typeof opt === "string") opt = {name:opt,value:opt}
-            if (!opt.type) opt.type = typeof opt.value;
-            opt.index = index;
-            return opt;
-        })
+        if (this.props.options) {
+            this.options = this.props.options.map((opt,index)=>{
+                if (typeof opt === "string") opt = {name:opt,value:opt}
+                if (!opt.type) opt.type = typeof opt.value;
+                opt.index = index;
+                return opt;
+            })
+        } else {
+            this.options = [];
+        }
     }
     async render(element) {
         await super.render(element);
@@ -47,7 +51,7 @@ export class InputSelect extends Component {
      * @returns {string}
      */
     get value() {
-        return this.options[this.input.value].value;
+        return this.options[this.input.value]?this.options[this.input.value].value.value:null;
     }
     set value(val) {
         let option = this.options.find(opt=>opt.value===val);
