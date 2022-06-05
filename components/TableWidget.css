@@ -8,11 +8,11 @@ TABLE {
     border-collapse: collapse;
 }
 TR:not(:first-child):hover {
-    background-color:var(--page-action);
+    background-color:var(--action-color);
     cursor:pointer;
 }
 TR.selected {
-    background-color:var(--page-selected);
+    background-color:var(--action-color);
 }
 TH {
     text-align:left;
