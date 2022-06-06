@@ -14,7 +14,6 @@ export default class CommonMixin {
             'moment-timezone':this.rootPath+'/node_modules/moment-timezone/builds/moment-timezone-with-data.js',
             'ace':this.rootPath+'/node_modules/ace-builds/src-noconflict/',
             // 'firemacro':this.rootPath+'/node_modules/@geistm/firemacro/index.js',
-            'chartjs':this.rootPath+'/node_modules/chart.js/dist/chart.js',
             'datepicker':this.rootPath+'/node_modules/js-datepicker/dist/datepicker.min.js',
             'zebratime':this.rootPath+'/node_modules/zebratime/zebratime.js',
             'xlsx':this.rootPath+'/node_modules/xlsx/dist/xlsx.full.min.js',
