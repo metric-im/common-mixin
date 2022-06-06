@@ -27,6 +27,7 @@ export default class CodeBlock extends Component {
         this.element.addEventListener('change',()=>{
             this.props.data[this.props.name] = this.editor.getValue();
         })
+        this.element.setAttribute('contenteditable',true);
     }
     async handleUpdate(attributeName) {
         await super.handleUpdate(attributeName);
