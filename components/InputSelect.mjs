@@ -51,7 +51,7 @@ export class InputSelect extends Component {
      * @returns {string}
      */
     get value() {
-        return this.options[this.input.value]?this.options[this.input.value].value.value:null;
+        return this.options[this.input.value]?this.options[this.input.value].value:null;
     }
     set value(val) {
         let option = this.options.find(opt=>opt.value===val);
