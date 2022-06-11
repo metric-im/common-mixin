@@ -1,7 +1,6 @@
 . {
     position:relative;
     flex:1 0;
-    width:100%;
     box-sizing:border-box;
     margin-top:var(--spacerhalf);
 }
@@ -10,6 +9,5 @@
     position:relative;
     flex:1 0;
     min-height:150px;
-    width:100%;
     overflow-y:auto;
 }

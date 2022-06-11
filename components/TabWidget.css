@@ -24,8 +24,24 @@
     color:var(--text-color);
     border-bottom-color:var(--bg-color);
 }
+.tab.hidden {
+    visibility: hidden;
+}
 .tabContent {
+    position:relative;
     flex:1 0;
     border:1px solid var(--page-border);
-    padding:var(--spacer);
+}
+.tabContent .contentComponent {
+    display:flex;
+    visibility: hidden;
+    position:absolute;
+    top:var(--spacer);
+    bottom:var(--spacer);
+    left:var(--spacer);
+    right:var(--spacer);
+    height:unset;
+}
+.tabContent .contentComponent.selected {
+    visibility:visible;
 }
