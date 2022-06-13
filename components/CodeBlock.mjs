@@ -24,14 +24,19 @@ export default class CodeBlock extends Component {
             fontSize: "12pt"
         });
         this.value = this.props.data[this.props.name];
-        this.element.addEventListener('change',()=>{
-            this.props.data[this.props.name] = this.editor.getValue();
-        })
+        // this.element.addEventListener('change',()=>{
+        //     this.props.data[this.props.name] = this.editor.getValue();
+        // })
+        // The change event does not fire when the field is empty, so we poll
+        if (this.updateInterval) clearInterval(this.updateInterval)
+        this.updateInterval = setInterval(()=>{
+            try {this.props.data[this.props.name] = this.editor.getValue();}catch(e){}
+        },500);
         this.element.setAttribute('contenteditable',true);
     }
     async handleUpdate(attributeName) {
         await super.handleUpdate(attributeName);
-        if (attributeName === 'derived' || attributeName === 'interpreter') {
+        if (attributeName === 'interpreter') {
             await this.update();
         } else if (this.props.name === attributeName) {
             this.editor.setValue(this.props.data[this.props.name]);
