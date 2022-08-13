@@ -1,0 +1,15 @@
+. {
+    width:100%;
+}
+INPUT[type=range] {
+    -webkit-appearance: none;
+    width: calc(100% - 16px);
+    border-radius: 8px;
+    height: 7px;
+    border: 1px solid #1997c6;
+    background-color: transparent;
+    padding: 4px;
+}
+INPUT[type=range].thin {
+    width:5%;
+}
