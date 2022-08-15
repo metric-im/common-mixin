@@ -1,7 +1,11 @@
 . {
+    display:flex;
     width:100%;
+    margin:var(--spacer) 0;
+    align-items: center;
 }
 INPUT[type=range] {
+    flex:1 1;
     -webkit-appearance: none;
     width: calc(100% - 16px);
     border-radius: 8px;
@@ -9,7 +13,17 @@ INPUT[type=range] {
     border: 1px solid #1997c6;
     background-color: transparent;
     padding: 4px;
+    margin: 0 var(--spacer);
 }
 INPUT[type=range].thin {
     width:5%;
+}
+.title {
+    flex:0 0;
+    margin-left:var(--spacer);
+}
+.value {
+    flex:15% 0;
+    margin-right:var(--spacer);
+    overflow:hidden;
 }
