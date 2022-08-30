@@ -91,3 +91,31 @@ export class InputNumber extends InputText {
         this.input.value = val;
     }
 }
+export class InputTextArea extends Component {
+    constructor(props) {
+        super(props);
+    }
+    async render(element) {
+        await super.render(element);
+        if (!this.props.hideTitle) {
+            this.title = this.div('form-element-title');
+            this.title.innerHTML = this.props.title || this.props.name;
+        }
+        this.input = document.createElement("textarea");
+        this.input.setAttribute('rows','6');
+        this.input.style.padding = 'var(--spacerhalf)';
+        this.element.append(this.input);
+    }
+    async handleUpdate(attributeName) {
+        await super.handleUpdate(attributeName);
+        if (this.props.name === attributeName) {
+            this.value = this.props.data[this.props.name];
+        }
+    }
+    get value() {
+        return this.input.value;
+    }
+    set value(val) {
+        this.input.value = val;
+    }
+}
