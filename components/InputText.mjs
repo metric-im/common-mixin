@@ -63,6 +63,16 @@ export class InputID extends InputText {
         }
     }
 }
+export class InputLongText extends InputText {
+    constructor(props) {
+        super(props);
+    }
+    async render(element) {
+        await super.render(element);
+        this.element.style.marginTop="var(--spacer)";
+        this.input.style.width="calc(100% - var(--spacer))";
+    }
+}
 export class InputPass extends InputText {
     constructor(props) {
         super(props);

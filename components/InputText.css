@@ -1,6 +1,0 @@
-.full-width {
-    margin-top:var(--spacer);
-}
-.full-width input {
-    width:calc(100% - var(--spacer));
-}
