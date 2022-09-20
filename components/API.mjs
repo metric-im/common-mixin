@@ -27,7 +27,7 @@ export default class API {
         } else {
             let e = new Error(`failed update ${path}`);
             e.status = response.status;
-            try {e.response = await response.json()} catch(e) {e.response = await response.text()}
+            try {e.response = await response.json()} catch(e) {e.response = response.statusText}
             throw(e);
         }
     }

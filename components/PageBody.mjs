@@ -7,8 +7,8 @@ export default class PageBody extends Component {
     }
     async render(element) {
         await super.render(element);
-        let Page = await this.page(this.props.page);
-        let page = new Page({context:this.props.context});
+        let Page = await this.page(this.props.context.page);
+        let page = new Page({context:this.props.context,page:this.props.context.page});
         this.element.innerHTML="";
         await page.render(this.element);
     }
