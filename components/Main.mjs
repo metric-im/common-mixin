@@ -8,7 +8,7 @@ import PageMenu from './PageMenu.mjs';
 import PageBody from './PageBody.mjs';
 import SignIn from './SignIn.mjs';
 import API from "./API.mjs";
-import Profile from "./Profile.mjs"
+import {menu} from "./Manifest.mjs"
 
 export default class Main extends Component {
     constructor(props) {
@@ -29,7 +29,7 @@ export default class Main extends Component {
         let pageMain = this.div('page-main');
         await this.new(PageFooter,{context:this.context}).render(this.element);
         if (this.context.id) {
-            await this.new(PageMenu,{context:this.context,menu:Profile.menu}).render(pageMain);
+            await this.new(PageMenu,{context:this.context,menu:menu}).render(pageMain);
             this.body = this.new(PageBody,{context:this.context});
             await this.body.render(pageMain);
         } else {
