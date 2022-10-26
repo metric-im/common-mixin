@@ -1,0 +1,17 @@
+. {
+    width:100%;
+    margin-bottom:var(--spacer);
+}
+table {
+    width:100%;
+}
+table td:not(:first-child) {
+    width:50%;
+}
+table td:not(:first-child) input,table td:not(:first-child) select {
+    width:100%;
+}
+table td:first-child {
+    font-family:monospace;
+    padding-right:var(--spacer);
+}
