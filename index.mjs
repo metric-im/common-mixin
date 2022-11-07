@@ -8,7 +8,7 @@ import {fileURLToPath} from "url";
 export default class CommonMixin {
     constructor(connector) {
         this.connector = connector;
-        this.rootPath = path.dirname(fileURLToPath(import.meta.url));
+        this.rootPath = process.env.RELATIVEMODULES?path.dirname(fileURLToPath(import.meta.url)):".";
         this.library = {
             'moment':this.rootPath+'/node_modules/moment/min/moment-with-locales.min.js',
             'moment-timezone':this.rootPath+'/node_modules/moment-timezone/builds/moment-timezone-with-data.js',
