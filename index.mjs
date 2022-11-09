@@ -1,25 +1,22 @@
 /**
  * App mixin that provides the common components for page structure and forms
  */
-import fs from 'fs';
-import express from 'express';
-import path from "path";
-import {fileURLToPath} from "url";
-export default class CommonMixin {
+import Componentry from "@metric-im/componentry";
+
+export default class CommonMixin extends Componentry.Module {
     constructor(connector) {
-        this.connector = connector;
-        this.rootPath = process.env.RELATIVEMODULES?path.dirname(fileURLToPath(import.meta.url)):".";
-        this.library = {
-            'moment':this.rootPath+'/node_modules/moment/min/moment-with-locales.min.js',
-            'moment-timezone':this.rootPath+'/node_modules/moment-timezone/builds/moment-timezone-with-data.js',
-            'ace':this.rootPath+'/node_modules/ace-builds/src-noconflict/',
-            // 'firemacro':this.rootPath+'/node_modules/@geistm/firemacro/index.js',
-            'datepicker':this.rootPath+'/node_modules/js-datepicker/dist/datepicker.min.js',
-            'zebratime':this.rootPath+'/node_modules/zebratime/zebratime.js',
-            'xlsx':this.rootPath+'/node_modules/xlsx/dist/xlsx.full.min.js',
-            'cronstrue':this.rootPath+'/node_modules/cronstrue/dist/cronstrue.min.js',
-            'marked':this.rootPath+'/node_modules/marked/lib/marked.esm.js'
+        super(connector,import.meta.url)
+    }
+    get library() {
+        return {
+            'moment':'/moment/min/moment-with-locales.min.js',
+            'moment-timezone':'/moment-timezone/builds/moment-timezone-with-data.js',
+            'ace':'/ace-builds/src-noconflict/',
+            'datepicker':'/js-datepicker/dist/datepicker.min.js',
+            'zebratime':'/zebratime/zebratime.js',
+            'xlsx':'/xlsx/dist/xlsx.full.min.js',
+            'cronstrue':'/cronstrue/dist/cronstrue.min.js',
+            'marked':'/marked/lib/marked.esm.js'
         };
-        this.componentPath = this.rootPath+'/components';
     }
 }
