@@ -2,10 +2,19 @@
  * App mixin that provides the common components for page structure and forms
  */
 import Componentry from "@metric-im/componentry";
+import express from "express";
 
 export default class CommonMixin extends Componentry.Module {
     constructor(connector) {
         super(connector,import.meta.url)
+    }
+    routes() {
+        let router = express.Router();
+        router.get('/styles',express.static(this.rootPath+"/styles"));
+        return router
+    }
+    get styles() {
+        return ['/styles/icons.css'];
     }
     get library() {
         return {
