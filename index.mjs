@@ -10,11 +10,7 @@ export default class CommonMixin extends Componentry.Module {
     }
     routes() {
         let router = express.Router();
-        router.get('/styles',express.static(this.rootPath+"/styles"));
         return router
-    }
-    get styles() {
-        return ['/styles/icons.css'];
     }
     get library() {
         return {
