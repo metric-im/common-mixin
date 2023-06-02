@@ -23,6 +23,10 @@ export default class TableWidget extends Component {
                 if (col.style) td.style = col.style;
                 let text = this.new(Text,{name:col.name,data:this.props.data[i],placeholder:col.placeholder||""})
                 await text.render(td);
+                if (col.icon) {
+                    let style = 'vertical-align:top;margin-right:6px;height16px;width:16px'; // size should be variable
+                    td.innerHTML = `<img style=${style} src='${col.icon.replace('{{value}}',this.props.data[i][col.name])}'>`+td.innerHTML;
+                }
             }
             row.addEventListener('click',(e)=>{
                 let tr = e.target.closest('TR');
