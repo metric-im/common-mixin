@@ -26,6 +26,9 @@ export default class TableWidget extends Component {
                 if (col.icon) {
                     let style = 'vertical-align:top;margin-right:6px;height16px;width:16px'; // size should be variable
                     td.innerHTML = `<img style=${style} src='${col.icon.replace('{{value}}',this.props.data[i][col.name])}'>`+td.innerHTML;
+                    td.querySelector('img').onerror = (event) => {
+                        event.target.style.visibility = 'hidden';
+                    }
                 }
             }
             row.addEventListener('click',(e)=>{
