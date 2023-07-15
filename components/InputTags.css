@@ -1,0 +1,51 @@
+. {
+    width:100%;
+    margin-bottom:var(--spacer);
+}
+.tray {
+    display:flex;
+    width:100%;
+}
+.container {
+    display:flex;
+    flex:1 0;
+    flex-wrap:wrap;
+    border:1px solid var(--text-color);
+    border-radius: 3px;
+    padding:0 6px 6px 6px;
+}
+.tag-element {
+    display:flex;
+    flex-direction: row;
+    background-color:var(--text-color-d);
+    align-items:baseline;
+    margin-top:6px;
+}
+.tag-element .InputText {
+    margin-right:unset !important;
+}
+.tag-element INPUT {
+    margin:-3px;
+    padding:1px 3px;
+    width:80px;
+    min-width:unset;
+    font-size:0.9em;
+}
+.tag-element.defined INPUT {
+    background-color: transparent;
+}
+.tag-control {
+    margin:-3px;
+    padding:3px;
+    cursor:pointer;
+}
+.tag-control .icon {
+    padding:2px;
+    border:1px solid var(--text-color);
+    margin-left:5px;
+    border-radius:15px;
+}
+.tag-control .icon:hover {
+    color:var(--bg-color);
+    background-color:var(--action-color-hilite);
+}

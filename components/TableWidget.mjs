@@ -48,6 +48,7 @@ export default class TableWidget extends Component {
     _select(id) {
         this.table.querySelectorAll('.selected').forEach(item=>item.classList.remove('selected'));
         let tr = this.table.querySelector(`[id='${id}']`);
+        if (!tr) return;
         tr.classList.add('selected');
         this.selected = tr;
         if (this.props.onSelect) this.props.onSelect(tr._data);

@@ -6,7 +6,6 @@
 .checkbox {
     position:relative;
     display:flex;
-    margin:0 !important;
     padding:0 6px;
     align-content:center;
     justify-content:center;

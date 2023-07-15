@@ -69,8 +69,17 @@ export class InputLongText extends InputText {
     }
     async render(element) {
         await super.render(element);
-        this.element.style.marginTop="var(--spacer)";
+        this.element.style.width="100%";
         this.input.style.width="calc(100% - var(--spacer))";
+    }
+}
+export class InputUrl extends InputLongText {
+    constructor(props) {
+        super(props);
+    }
+    async render(element) {
+        await super.render(element);
+        this.input.type = 'url';
     }
 }
 export class InputPass extends InputText {

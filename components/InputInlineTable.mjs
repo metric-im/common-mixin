@@ -27,38 +27,35 @@ export default class InputInlineTable extends Component {
   }
   async updateTable() {
     this.table.innerHTML = "";
-    // create header row
     let headerRow = this.table.insertRow();
-    headerRow.innerHTML = this.props.cols.map(cell=>`<th>${cell.title||cell.name}</th>`).join('\n');
-    headerRow.innerHTML += "<th></th>"; // controls
+    headerRow.innerHTML = this.props.cols.map(col=>`<th>${col.name}</th>`).join('\n');
     if (this.props.data[this.props.name]) {
+      let i = 0;
       for (let entry of this.props.data[this.props.name]) {
         let row = this.table.insertRow();
-        row.innerHTML = this.props.cols.map(cell=>`<td>${entry[cell.name]}</td>`).join('\n');
-        let control = row.insertCell();
-        let removeButton = new Button({icon:"circle-with-plus",onClick:this.removeRow.bind(this)});
-        await removeButton.render(control);
+        row.innerHTML = this.props.cols.map((col)=>`<td>${entry[col.name]}</td>`).join('\n');
+        await this.draw(Button,{icon:"circle-with-minus",onClick:this.removeRow.bind(this,i++)},row);
       }
     }
-    let newRow = this.table.insertRow();
     let newData = {};
-    let components
-    for (let cell of this.props.cols) {
-      let td = newRow.insertCell();
-      let component = new (cell.component||InputText)({name:cell.name,data:newData,hideTitle:true});
-      td._component = component;
-      await component.render(td);
+    this.newRow = this.table.insertRow();
+    for (let col of this.props.cols) {
+      let cell = this.newRow.insertCell();
+      let component = new (col.component||InputText)({name:col.name,data:newData,hideTitle:true});
+      cell._component = component;
+      await component.render(cell);
     }
-    let control = newRow.insertCell();
-    let addButton = new Button({icon:"circle-with-plus",onClick:this.addRow.bind(this,newRow)});
-    await addButton.render(control);
+    await this.draw(Button,{icon:"circle-with-plus",onClick:this.addRow.bind(this)},this.newRow);
   }
-  addRow(row) {
-    let data = Array.from(row.cells).reduce((result,cell)=>{
+  async addRow() {
+    let data = Array.from(this.newRow.cells).reduce((result,cell)=>{
       let component = cell._component;
-      if (component) result[cell.name] = component.value;
+      if (component) result[component.props.name] = component.value;
+      return result;
     },{})
-    this.table.insertRow(row);
+    if (!this.props.data[this.props.name]) this.props.data[this.props.name] = [];
+    this.props.data[this.props.name].push(data);
+    await this.updateTable();
   }
   removeRow(entry) {
     console.log(entry);
