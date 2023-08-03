@@ -12,6 +12,7 @@ import {Button} from './Button.mjs';
 export default class InputInlineTable extends Component {
   constructor(props) {
     super(props);
+    if (!this.props.data[this.props.name]) this.props.data[this.props.name] =[];
   }
   async render(element) {
     await super.render(element);
@@ -28,12 +29,18 @@ export default class InputInlineTable extends Component {
   async updateTable() {
     this.table.innerHTML = "";
     let headerRow = this.table.insertRow();
-    headerRow.innerHTML = this.props.cols.map(col=>`<th>${col.name}</th>`).join('\n');
+    headerRow.innerHTML = this.props.cols.map(col=>`<th style="${col.style}">${col.name}</th>`).join('\n');
     if (this.props.data[this.props.name]) {
       let i = 0;
       for (let entry of this.props.data[this.props.name]) {
         let row = this.table.insertRow();
-        row.innerHTML = this.props.cols.map((col)=>`<td>${entry[col.name]}</td>`).join('\n');
+        for (let col of this.props.cols) {
+          let cell = row.insertCell();
+          let component = new (col.component||InputText)({name:col.name,data:entry,hideTitle:true});
+          component.element.classList='quiet'
+          cell._component = component;
+          await component.render(cell);
+        }
         await this.draw(Button,{icon:"circle-with-minus",onClick:this.removeRow.bind(this,i++)},row);
       }
     }

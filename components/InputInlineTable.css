@@ -5,3 +5,6 @@
 table {
     width:100%;
 }
+.quiet INPUT {
+    border:0;
+}
