@@ -1,5 +1,6 @@
 import Component from "./Component.mjs";
 import Text from "./Text.mjs";
+import FireMacro from "./FireMacro.mjs";
 
 export default class TableWidget extends Component {
     constructor(props) {
@@ -25,7 +26,9 @@ export default class TableWidget extends Component {
                 await text.render(td);
                 if (col.icon) {
                     let style = 'vertical-align:top;margin-right:6px;height16px;width:16px'; // size should be variable
-                    td.innerHTML = `<img style=${style} src='${col.icon.replace('{{value}}',this.props.data[i][col.name])}'>`+td.innerHTML;
+                    let fm = new FireMacro(col.icon);
+                    let src = await fm.parse(this.props.data[i]);
+                    td.innerHTML = `<img style=${style} src='${src}'>`+td.innerHTML;
                     td.querySelector('img').onerror = (event) => {
                         event.target.style.visibility = 'hidden';
                     }

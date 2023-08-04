@@ -28,3 +28,6 @@ TD {
 TD:not(:last-child) {
     padding-right:var(--spacerhalf);
 }
+TD:first-child IMG {
+    display:inline-block;
+}
