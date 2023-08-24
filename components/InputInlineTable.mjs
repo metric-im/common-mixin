@@ -1,6 +1,8 @@
 import Component from './Component.mjs';
 import {InputText} from './InputText.mjs';
 import {Button} from './Button.mjs';
+import ToolTip from "./ToolTip.mjs";
+
 /**
  * Inline table is for managing an array of objects is a collection entry.
  * Like other input components, it expects the data record and attribute name
@@ -16,6 +18,13 @@ export default class InputInlineTable extends Component {
   }
   async render(element) {
     await super.render(element);
+    if (this.props.title) {
+      let title = this.div('attribute-title')
+      title.innerHTML = this.props.title;
+    }
+    if (this.props.tip) {
+      await this.draw(ToolTip,{text:this.props.tip},this.element);
+    }
     // as default set columns to name value of data attribute
     if (!this.props.cols) {
       this.props.cols = Object.keys(this.props.data[this.props.data.name]).map(key=>{
@@ -28,14 +37,17 @@ export default class InputInlineTable extends Component {
   }
   async updateTable() {
     this.table.innerHTML = "";
-    let headerRow = this.table.insertRow();
-    headerRow.innerHTML = this.props.cols.map(col=>`<th style="${col.style}">${col.name}</th>`).join('\n');
+    if (!this.props.noHeader) {
+      let headerRow = this.table.insertRow();
+      headerRow.innerHTML = this.props.cols.map(col=>`<th style="${col.style}">${col.name}</th>`).join('\n');
+    }
     if (this.props.data[this.props.name]) {
       let i = 0;
       for (let entry of this.props.data[this.props.name]) {
         let row = this.table.insertRow();
         for (let col of this.props.cols) {
           let cell = row.insertCell();
+          if (col.style) cell.style = col.style;
           let component = new (col.component||InputText)({name:col.name,data:entry,hideTitle:true});
           component.element.classList='quiet'
           cell._component = component;
@@ -48,6 +60,7 @@ export default class InputInlineTable extends Component {
     this.newRow = this.table.insertRow();
     for (let col of this.props.cols) {
       let cell = this.newRow.insertCell();
+      if (col.style) cell.style = col.style;
       let component = new (col.component||InputText)({name:col.name,data:newData,hideTitle:true});
       cell._component = component;
       await component.render(cell);

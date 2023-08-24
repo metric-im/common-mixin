@@ -8,3 +8,7 @@ table {
 .quiet INPUT {
     border:0;
 }
+.attribute-title {
+    font-weight:bold;
+    margin-top:var(--spacer);
+}
