@@ -39,7 +39,8 @@ export default class InputInlineTable extends Component {
     this.table.innerHTML = "";
     if (!this.props.noHeader) {
       let headerRow = this.table.insertRow();
-      headerRow.innerHTML = this.props.cols.map(col=>`<th style="${col.style}">${col.name}</th>`).join('\n');
+
+      headerRow.innerHTML = this.props.cols.map(col=>`<th style="${col.style}">${col.title||col.name}</th>`).join('\n');
     }
     if (this.props.data[this.props.name]) {
       let i = 0;
