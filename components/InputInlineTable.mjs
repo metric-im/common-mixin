@@ -4,7 +4,7 @@ import {Button} from './Button.mjs';
 import ToolTip from "./ToolTip.mjs";
 
 /**
- * Inline table is for managing an array of objects is a collection entry.
+ * Inline table is for managing an array of objects in a collection entry.
  * Like other input components, it expects the data record and attribute name
  * passed as properties. Additionally, provide 'cols' which is an array of
  * objects that instructs the handling of each entry attribute. Name is
@@ -14,7 +14,7 @@ import ToolTip from "./ToolTip.mjs";
 export default class InputInlineTable extends Component {
   constructor(props) {
     super(props);
-    if (!this.props.data[this.props.name]) this.props.data[this.props.name] =[];
+    if (!this.props.data[this.props.name]) this.props.data[this.props.name] = [];
   }
   async render(element) {
     await super.render(element);
@@ -78,8 +78,9 @@ export default class InputInlineTable extends Component {
     this.props.data[this.props.name].push(data);
     await this.updateTable();
   }
-  removeRow(entry) {
-    console.log(entry);
+  async removeRow(entry) {
+    this.props.data[this.props.name].splice(entry,1)
+    await this.updateTable();
   }
   get value() {
 
