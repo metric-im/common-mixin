@@ -46,7 +46,7 @@ export default class TableWidget extends Component {
     }
     selectLast() {
         let last = this.props.data[this.props.data.length-1];
-        this._select(window.btoa(last._id))
+        this._select(window.btoa(last[this.selector]))
     }
     _select(id) {
         this.table.querySelectorAll('.selected').forEach(item=>item.classList.remove('selected'));
