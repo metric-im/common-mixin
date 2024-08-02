@@ -64,6 +64,11 @@ export default class InputInlineTable extends Component {
       if (col.style) cell.style = col.style;
       let component = new (col.component||InputText)({name:col.name,data:newData,hideTitle:true});
       cell._component = component;
+      cell.addEventListener('keypress',(e)=>{
+        if (e.key === "Enter") {
+          this.addRow();
+        }
+      })
       await component.render(cell);
     }
     await this.draw(Button,{icon:"circle-with-plus",onClick:this.addRow.bind(this)},this.newRow);
