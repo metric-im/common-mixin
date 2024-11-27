@@ -1,6 +1,6 @@
 import Component from "./Component.mjs";
 import Text from "./Text.mjs";
-import FireMacro from "./FireMacro.mjs";
+import FireMacro from "/lib/firemacro";
 
 export default class TableWidget extends Component {
     constructor(props) {
