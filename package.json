@@ -18,6 +18,7 @@
   "homepage": "https://github.com/metric-im/common-components#readme",
   "dependencies": {
     "@metric-im/componentry": "^1.2.2",
+    "@metric-im/firemacro": "^2.0.1",
     "ace-builds": "^1.4.14",
     "chart.js": "^3.7.1",
     "express": "^4.17.3",

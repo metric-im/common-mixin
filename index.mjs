@@ -21,7 +21,8 @@ export default class CommonMixin extends Componentry.Module {
             'zebratime':'/zebratime/zebratime.js',
             'xlsx':'/xlsx/dist/xlsx.full.min.js',
             'cronstrue':'/cronstrue/dist/cronstrue.min.js',
-            'marked':'/marked/lib/marked.esm.js'
+            'marked':'/marked/lib/marked.esm.js',
+            'firemacro':'/@metric-im/firemacro/index.mjs'
         };
     }
 }
