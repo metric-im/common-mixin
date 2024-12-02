@@ -1,0 +1,13 @@
+.loader {
+    z-index: 99;
+    opacity: .5;
+    background-color: var(--action-color-hilite);
+    position: fixed;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
