@@ -54,7 +54,8 @@ export default class InputInlineTable extends Component {
           cell._component = component;
           await component.render(cell);
         }
-        await this.draw(Button,{icon:"circle-with-minus",onClick:this.removeRow.bind(this,i++)},row);
+        let control = row.insertCell()
+        await this.draw(Button,{icon:"circle-with-minus",onClick:this.removeRow.bind(this,i++)},control);
       }
     }
     let newData = {};
@@ -71,7 +72,8 @@ export default class InputInlineTable extends Component {
       })
       await component.render(cell);
     }
-    await this.draw(Button,{icon:"circle-with-plus",onClick:this.addRow.bind(this)},this.newRow);
+    let control = this.newRow.insertCell()
+    await this.draw(Button,{icon:"circle-with-plus",onClick:this.addRow.bind(this)},control);
   }
   async addRow() {
     let data = Array.from(this.newRow.cells).reduce((result,cell)=>{
