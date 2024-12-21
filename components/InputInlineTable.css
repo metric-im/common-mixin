@@ -11,4 +11,11 @@ table {
 .attribute-title {
     font-weight:bold;
     margin-top:var(--spacer);
+    font-size:0.8em;
+}
+.Button {
+    margin-right:0;
+}
+input {
+    width:100% !important;
 }

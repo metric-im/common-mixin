@@ -12,5 +12,6 @@ export class Button extends Component {
         this.button.addEventListener('click',this.props.onClick);
         this.button.disabled = this.props.disabled ?? false
         this.element.append(this.button);
+        if (this.props.layout) this.element.classList.add(this.props.layout);
     }
 }

@@ -24,7 +24,10 @@
     height:40px;
     align-self:flex-end;
 }
-
+.page-controls .Button {
+    margin-left:var(--spacer);
+    margin-right:0;
+}
 .properties {
     position:relative;
     display:flex;
