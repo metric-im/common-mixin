@@ -25,6 +25,7 @@ export class InputSlider extends Component {
         }
         this.input.addEventListener('input',async (e)=>{
             if (this.selectedText) this.selectedText.innerHTML = this.props.values[this.value];
+            this.props.data[this.props.name] = this.value;
             await this.announceUpdate(this.props.name);
         })
     }
