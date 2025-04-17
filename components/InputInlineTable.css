@@ -5,6 +5,9 @@
 table {
     width:100%;
 }
+TD DIV {
+    position:relative;
+}
 .quiet INPUT {
     border:0;
 }
@@ -25,5 +28,17 @@ input.invalid {
 }
 
 .invalid-message {
-    color: red;
+    display:block;
+    position:absolute;
+    background-color: var(--status-warning);
+    top:var(--spacerquarter);
+    right:var(--spacerquarter);
+    bottom:var(--spacerquarter);
+    left:var(--spacerquarter);
+    color: var(--item-bad);
+    overflow:hidden;
+    white-space: nowrap;
+}
+TD DIV:hover .invalid-message {
+    display:none;
 }
