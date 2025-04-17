@@ -19,3 +19,11 @@ table {
 input {
     width:100% !important;
 }
+
+input.invalid {
+    border: 1px solid red !important;
+}
+
+.invalid-message {
+    color: red;
+}

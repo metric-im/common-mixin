@@ -53,6 +53,9 @@ export default class InputInlineTable extends Component {
           component.element.classList='quiet'
           cell._component = component;
           await component.render(cell);
+          const input = cell.querySelector('input') || cell.querySelector('select')
+          if (input) this.initValidator(input, {
+            name: col.name, required: col.required ?? false, pattern: col.pattern, message: col.message || 'Enter correct value.'})
         }
         let control = row.insertCell()
         await this.draw(Button,{icon:"circle-with-minus",onClick:this.removeRow.bind(this,i++)},control);
@@ -66,16 +69,44 @@ export default class InputInlineTable extends Component {
       let component = new (col.component||InputText)({name:col.name,data:newData,hideTitle:true});
       cell._component = component;
       cell.addEventListener('keypress',(e)=>{
-        if (e.key === "Enter") {
+        const input = e.target
+        if (e.key === "Enter" && this.isValidInput(input)) {
           this.addRow();
         }
       })
+      cell.addEventListener('focusout',async (e)=>{
+        const input = e.target
+        if (this.isValidInput(input)) {
+          await this.addRow()
+        }
+      })
       await component.render(cell);
+      const input = cell.querySelector('input') || cell.querySelector('select')
+      if (input) this.initValidator(input, {
+        name: col.name, required: col.required ?? false, pattern: col.pattern, message: col.message || 'Enter correct value.', isNew: true})
     }
     let control = this.newRow.insertCell()
-    await this.draw(Button,{icon:"circle-with-plus",onClick:this.addRow.bind(this)},control);
+    await this.draw(Button,{icon:"circle-with-plus",onClick:this.checkAndAddRow.bind(this)},control);
   }
-  async addRow() {
+
+  async checkAndAddRow() {
+    let isValid = true
+    for (const cell of Array.from(this.newRow.cells)) {
+      const input = cell.querySelector('input') || cell.querySelector('select')
+      if (input && !this.isValidInput(input, false)) {
+        isValid = false
+        this.noticeInputErrors(input, false)
+      }
+    }
+    if (isValid) await this.addRow()
+    else window.toast.error('Please correct errors.')
+  }
+
+  async addRow(showMessage = true) {
+    if (!this.isValidNewRow()) {
+      if (showMessage) window.toast.error('Please correct errors.')
+      return;
+    };
     let data = Array.from(this.newRow.cells).reduce((result,cell)=>{
       let component = cell._component;
       if (component) result[component.props.name] = component.value;
@@ -85,11 +116,82 @@ export default class InputInlineTable extends Component {
     this.props.data[this.props.name].push(data);
     await this.updateTable();
   }
+
   async removeRow(entry) {
     this.props.data[this.props.name].splice(entry,1)
     await this.updateTable();
   }
+
   get value() {
 
+  }
+
+  initValidator(input, options) {
+    if (options.pattern) input.pattern = options.pattern
+    if (options.message) input.dataset.message = options.message
+    if (options.isNew) input.dataset.isNew = true
+    input.required = options.required
+    input.name = options.name
+
+    input.addEventListener('focusout', async (e) => this.noticeInputErrors(input, input.dataset.isNew))
+  }
+
+  isValidRows() {
+    let isValid = true
+    for (const row of Array.from(this.table.rows)) {
+      for (const cell of Array.from(row.cells)) {
+        const input = cell.querySelector('input') || cell.querySelector('select')
+        if (input && !this.isValidInput(input, input.dataset.isNew ?? false)) {
+          this.noticeInputErrors(input, input.dataset.isNew ?? false)
+          isValid = false
+        }
+      }
+    }
+    return isValid
+  }
+
+  isValidNewRow() {
+    let isValid = true
+    for (const cell of Array.from(this.newRow.cells)) {
+      const input = cell.querySelector('input') || cell.querySelector('select')
+      if (input && !this.isValidInput(input, true)) {
+        this.noticeInputErrors(input, true)
+        isValid = false
+      }
+    }
+    return isValid
+  }
+
+  isValidInput(input, ignoreRequired = false) {
+    if (ignoreRequired && !input.value) return true;
+    if (input.required && !input.value) return false
+    if (input.pattern && !input.checkValidity()) return false
+    return true
+  }
+
+  noticeInputErrors(input, ignoreRequired = false) {
+    const errors = []
+    input.parentElement.querySelectorAll('.invalid-message').forEach(el => el.remove())
+    input.classList.remove('invalid')
+
+    if (ignoreRequired && !input.value) return;
+
+    if (input.required && !input.value) {
+      errors.push(`The field ${input.name} is required.`)
+    }
+
+    if (input.value && input.pattern && !input.checkValidity()) {
+      errors.push(input.dataset.message)
+    }
+
+    if (errors.length > 0) {
+      input.classList.add('invalid')
+      errors.forEach(err => {
+        const div = document.createElement('div')
+        div.classList.add('invalid-message')
+        div.innerText = err
+        input.parentElement.appendChild(div)
+      })
+    }
   }
 }
