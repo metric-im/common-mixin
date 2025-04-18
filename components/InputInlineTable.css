@@ -35,7 +35,6 @@ input.invalid {
     right:var(--spacerquarter);
     bottom:var(--spacerquarter);
     left:var(--spacerquarter);
-    color: var(--item-bad);
     overflow:hidden;
     white-space: nowrap;
 }
