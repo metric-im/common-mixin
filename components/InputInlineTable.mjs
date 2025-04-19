@@ -16,6 +16,7 @@ export default class InputInlineTable extends Component {
     super(props);
     if (!this.props.data[this.props.name]) this.props.data[this.props.name] = [];
   }
+
   async render(element) {
     await super.render(element);
     if (this.props.title) {
@@ -35,6 +36,7 @@ export default class InputInlineTable extends Component {
     this.element.append(this.table);
     await this.updateTable();
   }
+
   async updateTable() {
     this.table.innerHTML = "";
     if (!this.props.noHeader) {
@@ -75,10 +77,16 @@ export default class InputInlineTable extends Component {
         }
       })
       cell.addEventListener('focusout',async (e)=>{
+
         const input = e.target
+
         if (this.isValidInput(input)) {
           await this.addRow()
         }
+
+        await this.switchRowBtn()
+
+
       })
       await component.render(cell);
       const input = cell.querySelector('input') || cell.querySelector('select')
@@ -86,7 +94,8 @@ export default class InputInlineTable extends Component {
         name: col.name, required: col.required ?? false, pattern: col.pattern, message: col.message || 'Enter correct value.', isNew: true})
     }
     let control = this.newRow.insertCell()
-    await this.draw(Button,{icon:"circle-with-plus",onClick:this.checkAndAddRow.bind(this)},control);
+    this.newRowBtn = await this.draw(Button,{icon:"circle-with-plus",onClick:this.checkAndAddRow.bind(this)},control);
+    this.newRowBtn.forAdd = true
   }
 
   async checkAndAddRow() {
@@ -174,9 +183,9 @@ export default class InputInlineTable extends Component {
     input.parentElement.querySelectorAll('.invalid-message').forEach(el => el.remove())
     input.classList.remove('invalid')
 
-    if (ignoreRequired && !input.value) return;
+    if (ignoreRequired && !input.value || input.value == '0') return;
 
-    if (input.required && !input.value) {
+    if (input.required && !input.value || input.value == '0') {
       errors.push(`The field ${input.name} is required.`)
     }
 
@@ -194,8 +203,40 @@ export default class InputInlineTable extends Component {
         input.addEventListener('mouseleave',async (e)=>{
           this.noticeInputErrors(input,false);
         })
-
       })
     }
   }
+
+  async switchRowBtn() {
+    let isEmpty = true
+    for (const cell of this.newRow.cells) {
+      const _input = cell.querySelector('input') || cell.querySelector('select')
+      if (_input && _input.value && _input.value != '0' && !['range'].includes(_input.type) && _input.name !== '_id') {
+        isEmpty = false
+        break
+      }
+    }
+    if (isEmpty) {
+      this.newRowBtn.props.icon = 'circle-with-plus'
+      this.newRowBtn.props.onClick = this.checkAndAddRow.bind(this)
+      this.newRowBtn.forAdd = true
+    } else {
+      this.newRowBtn.props.icon = 'circle-with-minus'
+      this.newRowBtn.props.onClick = () => {
+        for (const cell of this.newRow.cells) {
+          const _input = cell.querySelector('input') || cell.querySelector('select')
+          if (_input) {
+            _input.value = null
+            this.noticeInputErrors(_input, true)
+          }
+        }
+        this.switchRowBtn()
+      }
+      this.newRowBtn.forAdd = false
+    }
+
+
+    await this.newRowBtn.render()
+  }
+
 }
