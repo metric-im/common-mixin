@@ -84,7 +84,7 @@ export default class InputInlineTable extends Component {
           await this.addRow()
         }
 
-        await this.swithRowBtn()
+        await this.switchRowBtn()
 
 
       })
@@ -200,11 +200,14 @@ export default class InputInlineTable extends Component {
         div.classList.add('invalid-message')
         div.innerText = err
         input.parentElement.appendChild(div)
+        input.addEventListener('mouseleave',async (e)=>{
+          this.noticeInputErrors(input,false);
+        })
       })
     }
   }
 
-  async swithRowBtn() {
+  async switchRowBtn() {
     let isEmpty = true
     for (const cell of this.newRow.cells) {
       const _input = cell.querySelector('input') || cell.querySelector('select')
@@ -227,7 +230,7 @@ export default class InputInlineTable extends Component {
             this.noticeInputErrors(_input, true)
           }
         }
-        this.swithRowBtn()
+        this.switchRowBtn()
       }
       this.newRowBtn.forAdd = false
     }
