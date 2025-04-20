@@ -86,7 +86,6 @@ export default class InputInlineTable extends Component {
 
         await this.switchRowBtn()
 
-
       })
       await component.render(cell);
       const input = cell.querySelector('input') || cell.querySelector('select')
@@ -95,7 +94,7 @@ export default class InputInlineTable extends Component {
     }
     let control = this.newRow.insertCell()
     this.newRowBtn = await this.draw(Button,{icon:"circle-with-plus",onClick:this.checkAndAddRow.bind(this)},control);
-    this.newRowBtn.forAdd = true
+    this.newRowBtn.toAdd = true
   }
 
   async checkAndAddRow() {
@@ -172,8 +171,8 @@ export default class InputInlineTable extends Component {
   }
 
   isValidInput(input, ignoreRequired = false) {
-    if (ignoreRequired && !input.value) return true;
-    if (input.required && !input.value) return false
+    if (ignoreRequired && !input.value || input.value == '0') return true;
+    if (input.required && !input.value || input.value == '0') return false
     if (input.pattern && !input.checkValidity()) return false
     return true
   }
@@ -219,22 +218,21 @@ export default class InputInlineTable extends Component {
     if (isEmpty) {
       this.newRowBtn.props.icon = 'circle-with-plus'
       this.newRowBtn.props.onClick = this.checkAndAddRow.bind(this)
-      this.newRowBtn.forAdd = true
-    } else {
+      this.newRowBtn.toAdd = true
+    } else if (this.newRowBtn.toAdd) {
       this.newRowBtn.props.icon = 'circle-with-minus'
       this.newRowBtn.props.onClick = () => {
         for (const cell of this.newRow.cells) {
           const _input = cell.querySelector('input') || cell.querySelector('select')
-          if (_input) {
+          if (_input && _input.value && _input.value != '0' && !['range'].includes(_input.type) && _input.name !== '_id') {
             _input.value = null
             this.noticeInputErrors(_input, true)
           }
         }
         this.switchRowBtn()
       }
-      this.newRowBtn.forAdd = false
+      this.newRowBtn.toAdd = false
     }
-
 
     await this.newRowBtn.render()
   }
