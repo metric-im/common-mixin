@@ -131,7 +131,7 @@ export default class InputInlineTable extends Component {
   }
 
   get value() {
-
+    return this.data
   }
 
   initValidator(input, options) {
@@ -235,6 +235,17 @@ export default class InputInlineTable extends Component {
     }
 
     await this.newRowBtn.render()
+  }
+
+  get data() {
+    return Array.from(this.table.rows).reduce((result, row) => {
+      const item = Array.from(row.cells).reduce((_result, cell) => {
+        let component = cell._component;
+        if (component) _result[component.props.name] = component.value;
+        return _result;
+      }, {})
+      return [...result, item]
+    }, [])
   }
 
 }
