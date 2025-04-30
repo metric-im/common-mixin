@@ -57,7 +57,12 @@ export default class InputInlineTable extends Component {
           await component.render(cell);
           const input = cell.querySelector('input') || cell.querySelector('select')
           if (input) this.initValidator(input, {
-            name: col.name, required: col.required ?? false, pattern: col.pattern, message: col.message || 'Enter correct value.'})
+            name: col.name,
+            required: col.required ?? false,
+            pattern: col.pattern,
+            message: col.message || 'Enter correct value.',
+            ignoreValidation: col.ignoreValidation ?? false,
+          })
         }
         let control = row.insertCell()
         await this.draw(Button,{icon:"circle-with-minus",onClick:this.removeRow.bind(this,i++)},control);
@@ -90,7 +95,13 @@ export default class InputInlineTable extends Component {
       await component.render(cell);
       const input = cell.querySelector('input') || cell.querySelector('select')
       if (input) this.initValidator(input, {
-        name: col.name, required: col.required ?? false, pattern: col.pattern, message: col.message || 'Enter correct value.', isNew: true})
+        name: col.name,
+        required: col.required ?? false,
+        pattern: col.pattern,
+        message: col.message || 'Enter correct value.',
+        isNew: true,
+        ignoreValidation: col.ignoreValidation ?? false
+      })
     }
     let control = this.newRow.insertCell()
     this.newRowBtn = await this.draw(Button,{icon:"circle-with-plus",onClick:this.checkAndAddRow.bind(this)},control);
@@ -139,9 +150,14 @@ export default class InputInlineTable extends Component {
     if (options.message) input.dataset.message = options.message
     if (options.isNew) input.dataset.isNew = true
     input.required = options.required
+    input.dataset.ignoreValidation = options.ignoreValidation
     input.name = options.name
 
-    input.addEventListener('focusout', async (e) => this.noticeInputErrors(input, input.dataset.isNew))
+    if (this.makeBool(input.dataset.ignoreValidation)) input.addEventListener('focusout', async (e) => this.noticeInputWarnings(input, input.dataset.isNew))
+    else input.addEventListener('focusout', async (e) => {
+      console.log(input)
+      this.noticeInputErrors(input, this.makeBool(input.dataset.isNew))
+    })
   }
 
   isValidRows() {
@@ -149,9 +165,11 @@ export default class InputInlineTable extends Component {
     for (const row of Array.from(this.table.rows)) {
       for (const cell of Array.from(row.cells)) {
         const input = cell.querySelector('input') || cell.querySelector('select')
-        if (input && !this.isValidInput(input, input.dataset.isNew ?? false)) {
-          this.noticeInputErrors(input, input.dataset.isNew ?? false)
+        if (input && !this.isValidInput(input, this.makeBool(input.dataset.isNew))) {
+          this.noticeInputErrors(input, this.makeBool(input.dataset.isNew))
           isValid = false
+        } else if (input && this.makeBool(input.dataset.ignoreValidation)) {
+          this.noticeInputWarnings(input, this.makeBool(input.dataset.isNew))
         }
       }
     }
@@ -165,24 +183,24 @@ export default class InputInlineTable extends Component {
       if (input && !this.isValidInput(input, true)) {
         this.noticeInputErrors(input, true)
         isValid = false
+      } else if (input && this.makeBool(input.dataset.ignoreValidation)) {
+        this.noticeInputWarnings(input, true)
       }
     }
     return isValid
   }
 
   isValidInput(input, ignoreRequired = false) {
+    if (this.makeBool(input.dataset.ignoreValidation)) return true
     if (ignoreRequired && !input.value || input.value == '0') return true;
     if (input.required && !input.value || input.value == '0') return false
     if (input.pattern && !input.checkValidity()) return false
     return true
   }
 
-  noticeInputErrors(input, ignoreRequired = false) {
+  getInputErrors(input, ignoreRequired = false) {
     const errors = []
-    input.parentElement.querySelectorAll('.invalid-message').forEach(el => el.remove())
-    input.classList.remove('invalid')
-
-    if (ignoreRequired && !input.value || input.value == '0') return;
+    if (ignoreRequired && !input.value || input.value == '0') return errors;
 
     if (input.required && !input.value || input.value == '0') {
       errors.push(`The field ${input.name} is required.`)
@@ -192,6 +210,17 @@ export default class InputInlineTable extends Component {
       errors.push(input.dataset.message)
     }
 
+    return errors
+
+  }
+
+  noticeInputErrors(input, ignoreRequired = false) {
+    input.parentElement.querySelectorAll('.invalid-message').forEach(el => el.remove())
+    input.classList.remove('invalid')
+
+    const errors = this.getInputErrors(input, ignoreRequired)
+    console.log(errors)
+
     if (errors.length > 0) {
       input.classList.add('invalid')
       errors.forEach(err => {
@@ -200,7 +229,27 @@ export default class InputInlineTable extends Component {
         div.innerText = err
         input.parentElement.appendChild(div)
         input.addEventListener('mouseleave',async (e)=>{
-          this.noticeInputErrors(input,false);
+          this.noticeInputErrors(input, this.makeBool(input.dataset.isNew));
+        })
+      })
+    }
+  }
+
+  noticeInputWarnings(input, ignoreRequired = false) {
+    input.parentElement.querySelectorAll('.invalid-warning-message').forEach(el => el.remove())
+    input.classList.remove('invalid-warning')
+
+    const errors = this.getInputErrors(input, ignoreRequired)
+
+    if (errors.length > 0) {
+      input.classList.add('invalid-warning')
+      errors.forEach(err => {
+        const div = document.createElement('div')
+        div.classList.add('invalid-warning-message')
+        div.innerText = err
+        input.parentElement.appendChild(div)
+        input.addEventListener('mouseleave', async (e) => {
+          this.noticeInputWarnings(input, this.makeBool(input.dataset.isNew));
         })
       })
     }
@@ -227,6 +276,7 @@ export default class InputInlineTable extends Component {
           if (_input && _input.value && _input.value != '0' && !['range'].includes(_input.type) && _input.name !== '_id') {
             _input.value = null
             this.noticeInputErrors(_input, true)
+            this.noticeInputWarnings(_input, true)
           }
         }
         this.switchRowBtn()
@@ -246,6 +296,10 @@ export default class InputInlineTable extends Component {
       }, {})
       return [...result, item]
     }, [])
+  }
+
+  makeBool(val) {
+    return ['true', 'True', 1, '1', true].includes(val)
   }
 
 }
