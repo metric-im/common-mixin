@@ -238,7 +238,7 @@ export default class InputInlineTable extends Component {
   }
 
   get data() {
-    return Array.from(this.table.rows).reduce((result, row) => {
+    return Array.from(this.table.rows).slice(1, -1).reduce((result, row) => {
       const item = Array.from(row.cells).reduce((_result, cell) => {
         let component = cell._component;
         if (component) _result[component.props.name] = component.value;
