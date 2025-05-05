@@ -27,10 +27,13 @@ input.invalid {
     border: 1px solid red !important;
 }
 
-.invalid-message {
+input.invalid-warning {
+    border: 1px solid yellow !important;
+}
+
+.invalid-message, .invalid-warning-message {
     display:block;
     position:absolute;
-    background-color: var(--status-warning);
     top:var(--spacerquarter);
     right:var(--spacerquarter);
     bottom:var(--spacerquarter);
@@ -38,6 +41,17 @@ input.invalid {
     overflow:hidden;
     white-space: nowrap;
 }
-TD DIV:hover .invalid-message {
+
+.invalid-message {
+    background-color: var(--status-error);
+    color: #fff;
+}
+
+.invalid-warning-message {
+    background-color: var(--status-warning);
+}
+
+
+TD DIV:hover .invalid-message, TD DIV:hover .invalid-warning-message {
     display:none;
 }
