@@ -106,6 +106,7 @@ export default class InputInlineTable extends Component {
     let control = this.newRow.insertCell()
     this.newRowBtn = await this.draw(Button,{icon:"circle-with-plus",onClick:this.checkAndAddRow.bind(this)},control);
     this.newRowBtn.toAdd = true
+    this.setInitialDataSnapshot()
   }
 
   async checkAndAddRow() {
@@ -155,7 +156,6 @@ export default class InputInlineTable extends Component {
 
     if (this.makeBool(input.dataset.ignoreValidation)) input.addEventListener('focusout', async (e) => this.noticeInputWarnings(input, input.dataset.isNew))
     else input.addEventListener('focusout', async (e) => {
-      console.log(input)
       this.noticeInputErrors(input, this.makeBool(input.dataset.isNew))
     })
   }
@@ -219,7 +219,6 @@ export default class InputInlineTable extends Component {
     input.classList.remove('invalid')
 
     const errors = this.getInputErrors(input, ignoreRequired)
-    console.log(errors)
 
     if (errors.length > 0) {
       input.classList.add('invalid')
@@ -300,6 +299,14 @@ export default class InputInlineTable extends Component {
 
   makeBool(val) {
     return ['true', 'True', 1, '1', true].includes(val)
+  }
+
+  setInitialDataSnapshot(force = false) {
+    if (!this._originalData || force) this._originalData = JSON.stringify(this.data);
+  }
+
+  hasChanged() {
+    return JSON.stringify(this.data) !== this._originalData;
   }
 
 }
