@@ -41,8 +41,7 @@ export default class InputInlineTable extends Component {
     this.table.innerHTML = "";
     if (!this.props.noHeader) {
       let headerRow = this.table.insertRow();
-
-      headerRow.innerHTML = this.props.cols.map(col=>`<th style="${col.style}">${col.title||col.name}</th>`).join('\n');
+      headerRow.innerHTML = this.props.cols.map(col=>`<th style="${col.style}">${col.title===undefined?col.name:col.title}</th>`).join('\n');
     }
     if (this.props.data[this.props.name]) {
       let i = 0;
@@ -255,15 +254,7 @@ export default class InputInlineTable extends Component {
   }
 
   async switchRowBtn() {
-    let isEmpty = true
-    for (const cell of this.newRow.cells) {
-      const _input = cell.querySelector('input') || cell.querySelector('select')
-      if (_input && _input.value && _input.value != '0' && !['range'].includes(_input.type) && _input.name !== '_id') {
-        isEmpty = false
-        break
-      }
-    }
-    if (isEmpty) {
+    if (this.isEmptyRow(this.newRow)) {
       this.newRowBtn.props.icon = 'circle-with-plus'
       this.newRowBtn.props.onClick = this.checkAndAddRow.bind(this)
       this.newRowBtn.toAdd = true
@@ -285,9 +276,21 @@ export default class InputInlineTable extends Component {
 
     await this.newRowBtn.render()
   }
+  isEmptyRow(row) {
+    for (const cell of row.cells) {
+      const _input = cell.querySelector('input') || cell.querySelector('select')
+      if (_input && _input.value && _input.value != '0' && !['range'].includes(_input.type) && _input.name !== '_id') {
+        return false;
+      }
+    }
+    return true;
+  }
 
   get data() {
-    return Array.from(this.table.rows).reduce((result, row) => {
+    let data = Array.from(this.table.rows);
+    return data.reduce((result, row, i) => {
+      if (!this.props.noHeader && i === 0) return result;
+      if (i === data.length - 1 && this.isEmptyRow(row)) return result;
       const item = Array.from(row.cells).reduce((_result, cell) => {
         let component = cell._component;
         if (component) _result[component.props.name] = component.value;
