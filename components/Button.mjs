@@ -14,4 +14,9 @@ export class Button extends Component {
         this.element.append(this.button);
         if (this.props.layout) this.element.classList.add(this.props.layout);
     }
+
+    set working(value) {
+        this.element.classList[value?'add':'remove']('working');
+        this.button.disable = !value;
+    }
 }
