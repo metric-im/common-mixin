@@ -5,6 +5,10 @@ export default class API {
     static async get(path,options={},format="json") {
         if (path.charAt(0) !== '/') path = '/'+path;
         options.credentials = 'include';
+        if (!options.headers) options.headers = {};
+        if (format === "json" && !options.headers['Accept']) {
+          options.headers['Accept'] = 'application/json';
+        }
         let response = await fetch(path,options);
         if (response.ok) {
             return response.status===204?{}:await response[format]();
@@ -17,6 +21,19 @@ export default class API {
     }
     static async getText(path,options) {
         return await this.get(path,options,'text');
+    }
+    static async post(path,body) {
+        if (path.charAt(0) !== '/') path = '/'+path;
+        let options = {method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)};
+        let response = await fetch(path,options);
+        if (response.ok) {
+            return response.status===204?{}:await response.json();
+        } else {
+            let e = new Error(`failed to post ${path}`);
+            e.status = response.status;
+            try {e.response = await response.json()} catch(e) {e.response = response.statusText}
+            throw(e);
+        }
     }
     static async put(path,body) {
         if (path.charAt(0) !== '/') path = '/'+path;
