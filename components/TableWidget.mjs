@@ -22,8 +22,14 @@ export default class TableWidget extends Component {
             for (let col of this.props.columns) {
                 let td = row.insertCell();
                 if (col.style) td.style = col.style;
-                let text = this.new(Text,{name:col.name,data:this.props.data[i],placeholder:col.placeholder||""})
-                await text.render(td);
+                if (col.component) {
+                    let comp = this.new(col.component,{name:col.name,data:this.props.data[i],placeholder:col.placeholder||""})
+                    await comp.render(td);
+                } else {
+                    let text = this.new(Text,{name:col.name,data:this.props.data[i],placeholder:col.placeholder||""})
+                    await text.render(td);
+                }
+
                 if (col.icon) {
                     let style = 'vertical-align:top;margin-right:6px;height16px;width:16px'; // size should be variable
                     let fm = new FireMacro(col.icon);

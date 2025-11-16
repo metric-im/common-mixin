@@ -16,6 +16,7 @@ export default class InputInlineTable extends Component {
     super(props);
     if (!this.props.data[this.props.name]) this.props.data[this.props.name] = [];
   }
+
   async render(element) {
     await super.render(element);
     if (this.props.title) {
@@ -35,12 +36,12 @@ export default class InputInlineTable extends Component {
     this.element.append(this.table);
     await this.updateTable();
   }
+
   async updateTable() {
     this.table.innerHTML = "";
     if (!this.props.noHeader) {
       let headerRow = this.table.insertRow();
-
-      headerRow.innerHTML = this.props.cols.map(col=>`<th style="${col.style}">${col.title||col.name}</th>`).join('\n');
+      headerRow.innerHTML = this.props.cols.map(col=>`<th style="${col.style}">${col.title===undefined?col.name:col.title}</th>`).join('\n');
     }
     if (this.props.data[this.props.name]) {
       let i = 0;
@@ -53,8 +54,17 @@ export default class InputInlineTable extends Component {
           component.element.classList='quiet'
           cell._component = component;
           await component.render(cell);
+          const input = cell.querySelector('input') || cell.querySelector('select')
+          if (input) this.initValidator(input, {
+            name: col.name,
+            required: col.required ?? false,
+            pattern: col.pattern,
+            message: col.message || 'Enter correct value.',
+            ignoreValidation: col.ignoreValidation ?? false,
+          })
         }
-        await this.draw(Button,{icon:"circle-with-minus",onClick:this.removeRow.bind(this,i++)},row);
+        let control = row.insertCell()
+        await this.draw(Button,{icon:"circle-with-minus",onClick:this.removeRow.bind(this,i++)},control);
       }
     }
     let newData = {};
@@ -65,15 +75,57 @@ export default class InputInlineTable extends Component {
       let component = new (col.component||InputText)({name:col.name,data:newData,hideTitle:true});
       cell._component = component;
       cell.addEventListener('keypress',(e)=>{
-        if (e.key === "Enter") {
+        const input = e.target
+        if (e.key === "Enter" && this.isValidInput(input)) {
           this.addRow();
         }
       })
+      cell.addEventListener('focusout',async (e)=>{
+
+        const input = e.target
+
+        if (this.isValidInput(input)) {
+          await this.addRow()
+        }
+
+        await this.switchRowBtn()
+
+      })
       await component.render(cell);
+      const input = cell.querySelector('input') || cell.querySelector('select')
+      if (input) this.initValidator(input, {
+        name: col.name,
+        required: col.required ?? false,
+        pattern: col.pattern,
+        message: col.message || 'Enter correct value.',
+        isNew: true,
+        ignoreValidation: col.ignoreValidation ?? false
+      })
     }
-    await this.draw(Button,{icon:"circle-with-plus",onClick:this.addRow.bind(this)},this.newRow);
+    let control = this.newRow.insertCell()
+    this.newRowBtn = await this.draw(Button,{icon:"circle-with-plus",onClick:this.checkAndAddRow.bind(this)},control);
+    this.newRowBtn.toAdd = true
+    this.setInitialDataSnapshot()
   }
-  async addRow() {
+
+  async checkAndAddRow() {
+    let isValid = true
+    for (const cell of Array.from(this.newRow.cells)) {
+      const input = cell.querySelector('input') || cell.querySelector('select')
+      if (input && !this.isValidInput(input, false)) {
+        isValid = false
+        this.noticeInputErrors(input, false)
+      }
+    }
+    if (isValid) await this.addRow()
+    else window.toast.error('Please correct errors.')
+  }
+
+  async addRow(showMessage = true) {
+    if (!this.isValidNewRow()) {
+      if (showMessage) window.toast.error('Please correct errors.')
+      return;
+    };
     let data = Array.from(this.newRow.cells).reduce((result,cell)=>{
       let component = cell._component;
       if (component) result[component.props.name] = component.value;
@@ -83,11 +135,181 @@ export default class InputInlineTable extends Component {
     this.props.data[this.props.name].push(data);
     await this.updateTable();
   }
+
   async removeRow(entry) {
     this.props.data[this.props.name].splice(entry,1)
     await this.updateTable();
   }
+
   get value() {
+    return this.data
+  }
+
+  initValidator(input, options) {
+    if (options.pattern) input.pattern = options.pattern
+    if (options.message) input.dataset.message = options.message
+    if (options.isNew) input.dataset.isNew = true
+    input.required = options.required
+    input.dataset.ignoreValidation = options.ignoreValidation
+    input.name = options.name
+
+    if (this.makeBool(input.dataset.ignoreValidation)) input.addEventListener('focusout', async (e) => this.noticeInputWarnings(input, input.dataset.isNew))
+    else input.addEventListener('focusout', async (e) => {
+      this.noticeInputErrors(input, this.makeBool(input.dataset.isNew))
+    })
+  }
+
+  isValidRows() {
+    let isValid = true
+    for (const row of Array.from(this.table.rows)) {
+      for (const cell of Array.from(row.cells)) {
+        const input = cell.querySelector('input') || cell.querySelector('select')
+        if (input && !this.isValidInput(input, this.makeBool(input.dataset.isNew))) {
+          this.noticeInputErrors(input, this.makeBool(input.dataset.isNew))
+          isValid = false
+        } else if (input && this.makeBool(input.dataset.ignoreValidation)) {
+          this.noticeInputWarnings(input, this.makeBool(input.dataset.isNew))
+        }
+      }
+    }
+    return isValid
+  }
+
+  isValidNewRow() {
+    let isValid = true
+    for (const cell of Array.from(this.newRow.cells)) {
+      const input = cell.querySelector('input') || cell.querySelector('select')
+      if (input && !this.isValidInput(input, true)) {
+        this.noticeInputErrors(input, true)
+        isValid = false
+      } else if (input && this.makeBool(input.dataset.ignoreValidation)) {
+        this.noticeInputWarnings(input, true)
+      }
+    }
+    return isValid
+  }
+
+  isValidInput(input, ignoreRequired = false) {
+    if (this.makeBool(input.dataset.ignoreValidation)) return true
+    if (ignoreRequired && !input.value || input.value == '0') return true;
+    if (input.required && !input.value || input.value == '0') return false
+    if (input.pattern && !input.checkValidity()) return false
+    return true
+  }
+
+  getInputErrors(input, ignoreRequired = false) {
+    const errors = []
+    if (ignoreRequired && !input.value || input.value == '0') return errors;
+
+    if (input.required && !input.value || input.value == '0') {
+      errors.push(`The field ${input.name} is required.`)
+    }
+
+    if (input.value && input.pattern && !input.checkValidity()) {
+      errors.push(input.dataset.message)
+    }
+
+    return errors
 
   }
+
+  noticeInputErrors(input, ignoreRequired = false) {
+    input.parentElement.querySelectorAll('.invalid-message').forEach(el => el.remove())
+    input.classList.remove('invalid')
+
+    const errors = this.getInputErrors(input, ignoreRequired)
+
+    if (errors.length > 0) {
+      input.classList.add('invalid')
+      errors.forEach(err => {
+        const div = document.createElement('div')
+        div.classList.add('invalid-message')
+        div.innerText = err
+        input.parentElement.appendChild(div)
+        input.addEventListener('mouseleave',async (e)=>{
+          this.noticeInputErrors(input, this.makeBool(input.dataset.isNew));
+        })
+      })
+    }
+  }
+
+  noticeInputWarnings(input, ignoreRequired = false) {
+    input.parentElement.querySelectorAll('.invalid-warning-message').forEach(el => el.remove())
+    input.classList.remove('invalid-warning')
+
+    const errors = this.getInputErrors(input, ignoreRequired)
+
+    if (errors.length > 0) {
+      input.classList.add('invalid-warning')
+      errors.forEach(err => {
+        const div = document.createElement('div')
+        div.classList.add('invalid-warning-message')
+        div.innerText = err
+        input.parentElement.appendChild(div)
+        input.addEventListener('mouseleave', async (e) => {
+          this.noticeInputWarnings(input, this.makeBool(input.dataset.isNew));
+        })
+      })
+    }
+  }
+
+  async switchRowBtn() {
+    if (this.isEmptyRow(this.newRow)) {
+      this.newRowBtn.props.icon = 'circle-with-plus'
+      this.newRowBtn.props.onClick = this.checkAndAddRow.bind(this)
+      this.newRowBtn.toAdd = true
+    } else if (this.newRowBtn.toAdd) {
+      this.newRowBtn.props.icon = 'circle-with-minus'
+      this.newRowBtn.props.onClick = () => {
+        for (const cell of this.newRow.cells) {
+          const _input = cell.querySelector('input') || cell.querySelector('select')
+          if (_input && _input.value && _input.value != '0' && !['range'].includes(_input.type) && _input.name !== '_id') {
+            _input.value = null
+            this.noticeInputErrors(_input, true)
+            this.noticeInputWarnings(_input, true)
+          }
+        }
+        this.switchRowBtn()
+      }
+      this.newRowBtn.toAdd = false
+    }
+
+    await this.newRowBtn.render()
+  }
+  isEmptyRow(row) {
+    for (const cell of row.cells) {
+      const _input = cell.querySelector('input') || cell.querySelector('select')
+      if (_input && _input.value && _input.value != '0' && !['range'].includes(_input.type) && _input.name !== '_id') {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  get data() {
+    let data = Array.from(this.table.rows);
+    return data.reduce((result, row, i) => {
+      if (!this.props.noHeader && i === 0) return result;
+      if (i === data.length - 1 && this.isEmptyRow(row)) return result;
+      const item = Array.from(row.cells).reduce((_result, cell) => {
+        let component = cell._component;
+        if (component) _result[component.props.name] = component.value;
+        return _result;
+      }, {})
+      return [...result, item]
+    }, [])
+  }
+
+  makeBool(val) {
+    return ['true', 'True', 1, '1', true].includes(val)
+  }
+
+  setInitialDataSnapshot(force = false) {
+    if (!this._originalData || force) this._originalData = JSON.stringify(this.data);
+  }
+
+  hasChanged() {
+    return JSON.stringify(this.data) !== this._originalData;
+  }
+
 }
