@@ -32,6 +32,13 @@ export class InputSelect extends Component {
             return `<option ${selected?"selected":""} value="${opt.index}">${opt.name}</option>`
         });
         this.element.appendChild(this.input);
+        if (this.props.data[this.props.name] === undefined || 
+            this.props.data[this.props.name] === null || 
+            this.props.data[this.props.name] === '') {
+            if (this.options.length > 0) {
+                this.props.data[this.props.name] = this.options[this.input.value]?.value;
+            }
+        }
         this.element.addEventListener('change',async e=>{
             this.props.data[this.props.name] = this.options[e.target.value].value;
             await this.announceUpdate(this.props.name);
