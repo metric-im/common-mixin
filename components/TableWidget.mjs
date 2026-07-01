@@ -2,6 +2,13 @@ import Component from "./Component.mjs";
 import Text from "./Text.mjs";
 import FireMacro from "/lib/firemacro";
 
+// Unicode-safe base64 for use as an opaque DOM row id. Plain btoa() throws on characters
+// outside Latin1 (e.g. emojis or en-dashes in Meta entity names), so encode to UTF-8 first.
+function toRowId(v) {
+    const s = String(v ?? '');
+    return window.btoa(encodeURIComponent(s).replace(/%([0-9A-F]{2})/g, (_, h) => String.fromCharCode(parseInt(h, 16))));
+}
+
 export default class TableWidget extends Component {
     constructor(props) {
         super(props);
@@ -17,7 +24,7 @@ export default class TableWidget extends Component {
         }
         for (let i = 0;i < this.props.data.length;i++) {
             let row = this.table.insertRow();
-            row.id = window.btoa(this.props.data[i][this.selector]);
+            row.id = toRowId(this.props.data[i][this.selector]);
             row._data = this.props.data[i];
             for (let col of this.props.columns) {
                 let td = row.insertCell();
@@ -42,22 +49,24 @@ export default class TableWidget extends Component {
             }
             row.addEventListener('click',(e)=>{
                 let tr = e.target.closest('TR');
-                this._select(tr.id);
+                this._selectRow(tr);
             })
         }
         this.element.appendChild(this.table);
     }
     select(id) {
-        this._select(window.btoa(id));
+        this._select(toRowId(id));
     }
     selectLast() {
-        let last = this.props.data[this.props.data.length-1];
-        this._select(window.btoa(last[this.selector]))
+        let rows = this.table.rows;
+        if (rows.length > 1) this._selectRow(rows[rows.length-1]);
     }
     _select(id) {
+        this._selectRow(this.table.querySelector(`[id='${id}']`));
+    }
+    _selectRow(tr) {
         this.table.querySelectorAll('.selected').forEach(item=>item.classList.remove('selected'));
-        let tr = this.table.querySelector(`[id='${id}']`);
-        if (!tr) return;
+        if (!tr || !tr._data) return;
         tr.classList.add('selected');
         this.selected = tr;
         if (this.props.onSelect) this.props.onSelect(tr._data);
