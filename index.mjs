@@ -14,8 +14,8 @@ export default class CommonMixin extends Componentry.Module {
     }
     get library() {
         return {
-            'moment':'/moment/min/moment-with-locales.min.js',
-            'moment-timezone':'/moment-timezone/builds/moment-timezone-with-data.js',
+            'moment':'/moment/min/moment.min.js',
+            'moment-timezone':'/moment-timezone/builds/moment-timezone-with-data-10-year-range.min.js',
             'ace':'/ace-builds/src-noconflict/',
             'datepicker':'/js-datepicker/dist/datepicker.min.js',
             'zebratime':'/zebratime/zebratime.js',

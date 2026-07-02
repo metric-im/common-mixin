@@ -23,7 +23,9 @@ export default class Main extends Component {
     }
     async render(element) {
         await super.render(element);
-        this.context = Object.assign(this.context,await API.get("/session/context"));
+        // the page template starts this fetch before the module graph loads;
+        // fall back to a direct call when rendered outside that template
+        this.context = Object.assign(this.context,await (window.__contextPromise || API.get("/session/context")));
         this.header = await this.new(PageHeader,{context:this.context,title:"Home"});
         this.header.render(this.element);
         let pageMain = this.div('page-main');
